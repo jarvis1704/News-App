@@ -1,8 +1,9 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
+    id ("com.android.application")
+    id ("org.jetbrains.kotlin.android")
     id ("kotlin-kapt")
     id ("kotlin-parcelize")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -42,7 +43,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.4.7"
     }
     packaging {
         resources {
