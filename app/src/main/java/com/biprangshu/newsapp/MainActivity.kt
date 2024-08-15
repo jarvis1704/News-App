@@ -16,6 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import com.biprangshu.newsapp.domain.usecases.AppEntryUseCases
 import com.biprangshu.newsapp.ui.theme.NewsAppTheme
@@ -38,7 +40,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             NewsAppTheme {
                 Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)){
-                    OnBoardingScreen()
+                    val viewModel: OnBoardingViewModel = hiltViewModel()
+                    OnBoardingScreen(
+                        event = viewModel::onEvent
+                    )
                 }
             }
         }
