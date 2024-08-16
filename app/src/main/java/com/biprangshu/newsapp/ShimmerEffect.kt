@@ -49,7 +49,7 @@ fun Modifier.shimmerEffect()= composed {
 }
 
 @Composable
-fun ArticleCardShimmerEffect() {
+fun ArticleCardShimmerEffect(modifier: Modifier= Modifier) {
     val context = LocalContext.current
 
     Row() {
