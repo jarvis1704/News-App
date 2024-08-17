@@ -52,15 +52,15 @@ class MainActivity : ComponentActivity() {
         setContent {
             NewsAppTheme {
 
-                val isSystemDarkMode= isSystemInDarkTheme()
-                val systemController= rememberSystemUiController()
-
-                SideEffect {
-                    systemController.setSystemBarsColor(
-                        color = Color.Transparent,
-                        darkIcons = !isSystemDarkMode
-                    )
-                }
+//                val isSystemDarkMode= isSystemInDarkTheme()
+//                val systemController= rememberSystemUiController()
+//
+//                SideEffect {
+//                    systemController.setSystemBarsColor(
+//                        color = Color.Transparent,
+//                        darkIcons = !isSystemDarkMode
+//                    )
+//                }
 
                 Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)){
                     val startDestination= viewModel.startDestination
