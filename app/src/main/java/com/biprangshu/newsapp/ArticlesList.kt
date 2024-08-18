@@ -17,13 +17,32 @@ import com.biprangshu.newsapp.domain.model.Article
 @Composable
 fun ArticlesList(
     modifier: Modifier = Modifier,
+    articles: List<Article>,
+    onClick: (Article) -> Unit
+) {
+
+        LazyColumn(
+            modifier= modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(14.dp),
+            contentPadding = PaddingValues(all = 6.dp)
+        ) {
+            items(articles.size){
+                val article= articles[it]
+                ArticleCard(article = article, onClick = {onClick(article)})
+            }
+        }
+}
+
+@Composable
+fun ArticlesList(
+    modifier: Modifier = Modifier,
     articles: LazyPagingItems<Article>,
     onClick: (Article) -> Unit
     ) {
     val handlePagingResult= HandlePagingResult(articles = articles)
     if(handlePagingResult){
         LazyColumn(
-            modifier= Modifier.fillMaxSize(),
+            modifier= modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(14.dp),
             contentPadding = PaddingValues(all = 6.dp)
         ) {

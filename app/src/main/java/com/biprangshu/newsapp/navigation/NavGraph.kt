@@ -17,6 +17,8 @@ import com.biprangshu.newsapp.OnBoardingScreen
 import com.biprangshu.newsapp.OnBoardingViewModel
 import com.biprangshu.newsapp.SearchScreen
 import com.biprangshu.newsapp.SearchViewModel
+import com.biprangshu.newsapp.bookmark.BookMarkScreen
+import com.biprangshu.newsapp.bookmark.BookMarkViewModel
 
 @Composable
 fun NavGraph(
@@ -46,8 +48,10 @@ fun NavGraph(
             composable(
                 route = Route.NewsNavigatorScreen.Route
             ){
-                val viewModel: SearchViewModel= hiltViewModel()
-                SearchScreen(state = viewModel.state.value, event = viewModel::onEvent, navigate = {})
+                val viewModel: BookMarkViewModel= hiltViewModel()
+                BookMarkScreen(state = viewModel.state.value) {
+                    
+                }
             }
         }
     }
