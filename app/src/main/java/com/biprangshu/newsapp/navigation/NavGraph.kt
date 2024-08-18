@@ -15,6 +15,8 @@ import com.biprangshu.newsapp.HomeScreen
 import com.biprangshu.newsapp.HomeViewModel
 import com.biprangshu.newsapp.OnBoardingScreen
 import com.biprangshu.newsapp.OnBoardingViewModel
+import com.biprangshu.newsapp.SearchScreen
+import com.biprangshu.newsapp.SearchViewModel
 
 @Composable
 fun NavGraph(
@@ -44,11 +46,8 @@ fun NavGraph(
             composable(
                 route = Route.NewsNavigatorScreen.Route
             ){
-                val viewModel: HomeViewModel= hiltViewModel()
-                val article= viewModel.news.collectAsLazyPagingItems()
-                HomeScreen(articles = article) {
-
-                }
+                val viewModel: SearchViewModel= hiltViewModel()
+                SearchScreen(state = viewModel.state.value, event = viewModel::onEvent, navigate = {})
             }
         }
     }

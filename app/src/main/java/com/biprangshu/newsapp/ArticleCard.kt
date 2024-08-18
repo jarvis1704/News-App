@@ -53,7 +53,7 @@ fun ArticleCard(
         )
 
         Column(verticalArrangement = Arrangement.SpaceAround, modifier = Modifier
-            .padding(horizontal = 3.dp)
+            .padding(horizontal = 6.dp)
             .height(96.dp)) {
             Text(text = article.title, style = MaterialTheme.typography.bodyMedium, color = colorResource(
                 id = R.color.text_title

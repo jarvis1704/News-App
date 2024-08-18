@@ -2,6 +2,7 @@ package com.biprangshu.newsapp.di
 
 import android.app.Application
 import com.biprangshu.newsapp.NewsApplication
+import com.biprangshu.newsapp.SearchEvent
 import com.biprangshu.newsapp.Util.Constants.BASE_URL
 import com.biprangshu.newsapp.data.LocalUserManagerImplementation
 import com.biprangshu.newsapp.data.remote.NewsApi
@@ -13,6 +14,7 @@ import com.biprangshu.newsapp.domain.usecases.GetNews
 import com.biprangshu.newsapp.domain.usecases.NewsUseCases
 import com.biprangshu.newsapp.domain.usecases.ReadAppEntry
 import com.biprangshu.newsapp.domain.usecases.SaveAppEntry
+import com.biprangshu.newsapp.domain.usecases.SearchNewsUseCases
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -61,7 +63,8 @@ object AppModule {
         newsRepository: NewsRepository
     ): NewsUseCases{
         return NewsUseCases(
-            getNews = GetNews(newsRepository)
+            getNews = GetNews(newsRepository),
+            searchNews = SearchNewsUseCases(newsRepository)
         )
     }
 
