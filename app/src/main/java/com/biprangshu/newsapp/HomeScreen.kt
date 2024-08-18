@@ -32,7 +32,7 @@ import com.biprangshu.newsapp.navigation.Route
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomeScreen(articles: LazyPagingItems<Article>, navigate: (String)-> Unit) {
+fun HomeScreen(articles: LazyPagingItems<Article>, navigateToSearch: ()-> Unit, navigateToDetails: (Article)-> Unit) {
     val titles by remember{
         derivedStateOf {
             if(articles.itemCount>10){
@@ -51,7 +51,7 @@ fun HomeScreen(articles: LazyPagingItems<Article>, navigate: (String)-> Unit) {
             )
         Spacer(modifier = Modifier.height(24.dp))
         SearchBar(text = "", readOnly = true, onValueChange = {}, onSearch = {}, onClick = {
-            navigate(Route.SearchScreen.Route)
+            navigateToSearch()
         }, modifier = Modifier.padding(horizontal = 16.dp))
         Spacer(modifier = Modifier.height(24.dp))
         Text(
@@ -65,7 +65,7 @@ fun HomeScreen(articles: LazyPagingItems<Article>, navigate: (String)-> Unit) {
         )
         Spacer(modifier = Modifier.height(24.dp))
         ArticlesList(articles = articles, modifier = Modifier.padding(horizontal = 24.dp)) {
-            navigate(Route.DetailsScreen.Route)
+            navigateToDetails(it)
         }
     }
 }

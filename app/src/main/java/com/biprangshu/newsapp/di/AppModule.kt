@@ -20,6 +20,7 @@ import com.biprangshu.newsapp.domain.usecases.NewsUseCases
 import com.biprangshu.newsapp.domain.usecases.ReadAppEntry
 import com.biprangshu.newsapp.domain.usecases.SaveAppEntry
 import com.biprangshu.newsapp.domain.usecases.SearchNewsUseCases
+import com.biprangshu.newsapp.domain.usecases.SelectArticle
 import com.biprangshu.newsapp.domain.usecases.SelectArticles
 import com.biprangshu.newsapp.domain.usecases.UpsertArticle
 import dagger.Module
@@ -61,8 +62,9 @@ object AppModule {
     @Provides
     @Singleton
     fun provideNewsRepository(
-        newsApi: NewsApi
-    ): NewsRepository= NewsRespositoryImplementation(newsApi)
+        newsApi: NewsApi,
+        newsDao: NewsDao
+    ): NewsRepository= NewsRespositoryImplementation(newsApi, newsDao)
 
     @Provides
     @Singleton
@@ -73,9 +75,10 @@ object AppModule {
         return NewsUseCases(
             getNews = GetNews(newsRepository),
             searchNews = SearchNewsUseCases(newsRepository),
-            upsertArticle = UpsertArticle(newsDao),
-            deleteArticle = DeleteArticle(newsDao),
-            selectArticles = SelectArticles(newsDao)
+            upsertArticle = UpsertArticle(newsRepository),
+            deleteArticle = DeleteArticle(newsRepository),
+            selectArticles = SelectArticles(newsRepository),
+            selectArticle = SelectArticle(newsRepository)
         )
     }
 
