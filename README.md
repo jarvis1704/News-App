@@ -44,4 +44,4 @@ A modern news reader app built with Kotlin and Jetpack Compose.
 * Personalized News Feed: Get recommendations based on your reading habits.
 * Push Notifications: Stay up-to-date with breaking news alerts.
 
-I are constantly working to improve NewsApp and provide the best user experience possible. Feel free to share your feedback and suggestions!
+I am constantly working to improve NewsApp and provide the best user experience possible. Feel free to share your feedback and suggestions!
