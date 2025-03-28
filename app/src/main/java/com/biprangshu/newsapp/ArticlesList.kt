@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -18,13 +20,15 @@ import com.biprangshu.newsapp.domain.model.Article
 fun ArticlesList(
     modifier: Modifier = Modifier,
     articles: List<Article>,
-    onClick: (Article) -> Unit
+    onClick: (Article) -> Unit,
+    listState: LazyListState = rememberLazyListState()
 ) {
 
         LazyColumn(
             modifier= modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(14.dp),
-            contentPadding = PaddingValues(all = 6.dp)
+            contentPadding = PaddingValues(all = 6.dp),
+            state = listState
         ) {
             items(articles.size){
                 val article= articles[it]

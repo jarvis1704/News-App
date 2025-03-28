@@ -3,7 +3,9 @@ package com.biprangshu.newsapp.news_navigator
 import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -83,50 +85,55 @@ fun NewsNavigator(
           }
         }
     ) {
-        val bottomPadding= it.calculateBottomPadding()
-        NavHost(navController = navController, startDestination = Route.HomeScreen.Route, modifier = Modifier.padding(bottom = bottomPadding)) {
-            composable(Route.HomeScreen.Route){
-                val viewModel: HomeViewModel= hiltViewModel()
-                val articles= viewModel.news.collectAsLazyPagingItems()
-                HomeScreen(
-                    articles = articles,
-                    navigateToSearch = {
-                        NavigateToTab(navController, Route.SearchScreen.Route)
-                    },
-                    navigateToDetails = {
-                        article->
+        Surface(
+            color = MaterialTheme.colorScheme.background
+        ) {
+            val bottomPadding= it.calculateBottomPadding()
+            NavHost(navController = navController, startDestination = Route.HomeScreen.Route, modifier = Modifier.padding(bottom = bottomPadding)) {
+                composable(Route.HomeScreen.Route){
+                    val viewModel: HomeViewModel= hiltViewModel()
+                    val articles= viewModel.news.collectAsLazyPagingItems()
+                    HomeScreen(
+                        articles = articles,
+                        navigateToSearch = {
+                            NavigateToTab(navController, Route.SearchScreen.Route)
+                        },
+                        navigateToDetails = {
+                                article->
+                            NavigateToDetails(navController, article)
+                        }
+                    )
+                }
+                composable(Route.SearchScreen.Route){
+                    val viewModel: SearchViewModel= hiltViewModel()
+                    val state= viewModel.state.value
+                    SearchScreen(state = state, event = viewModel::onEvent, navigateToDetails = {
+                            article->
                         NavigateToDetails(navController, article)
+                    })
+                }
+                composable(Route.DetailsScreen.Route){
+                    val viewModel: DetailsViewModel= hiltViewModel()
+                    if(viewModel.sideEffect != null){
+                        Toast.makeText(LocalContext.current, viewModel.sideEffect, Toast.LENGTH_LONG).show()
+                        viewModel.onEvent(DetailsEvent.RemoveSideEffect)
                     }
-                )
-            }
-            composable(Route.SearchScreen.Route){
-                val viewModel: SearchViewModel= hiltViewModel()
-                val state= viewModel.state.value
-                SearchScreen(state = state, event = viewModel::onEvent, navigateToDetails = {
-                    article->
-                    NavigateToDetails(navController, article)
-                })
-            }
-            composable(Route.DetailsScreen.Route){
-                val viewModel: DetailsViewModel= hiltViewModel()
-                if(viewModel.sideEffect != null){
-                    Toast.makeText(LocalContext.current, viewModel.sideEffect, Toast.LENGTH_LONG).show()
-                    viewModel.onEvent(DetailsEvent.RemoveSideEffect)
+                    navController.previousBackStackEntry?.savedStateHandle?.get<Article?>("article")?.let {
+                            article->
+                        DetailsScreen(article = article, event = viewModel::onEvent, navigateUp = {navController.navigateUp()})
+                    }
                 }
-                navController.previousBackStackEntry?.savedStateHandle?.get<Article?>("article")?.let {
-                    article->
-                    DetailsScreen(article = article, event = viewModel::onEvent, navigateUp = {navController.navigateUp()})
+                composable(Route.BookMarkScreen.Route){
+                    val viewModel: BookMarkViewModel = hiltViewModel()
+                    val state= viewModel.state.value
+                    BookMarkScreen(state = state, navigateToDetails ={
+                            article->
+                        NavigateToDetails(navController = navController, article = article)
+                    } )
                 }
-            }
-            composable(Route.BookMarkScreen.Route){
-                val viewModel: BookMarkViewModel = hiltViewModel()
-                val state= viewModel.state.value
-                BookMarkScreen(state = state, navigateToDetails ={
-                    article->
-                    NavigateToDetails(navController = navController, article = article)
-                } )
             }
         }
+
     }
 }
 
