@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
@@ -44,28 +45,11 @@ class MainActivity : ComponentActivity() {
                 viewModel.splashCondition.value
             }
         }
-        lifecycleScope.launch {
-            appEntryUseCases.readAppEntry().collect{
-                Log.d("Test", it.toString())
-            }
-        }
+        WindowCompat.setDecorFitsSystemWindows(window,false)
         setContent {
             NewsAppTheme {
-
-//                val isSystemDarkMode= isSystemInDarkTheme()
-//                val systemController= rememberSystemUiController()
-//
-//                SideEffect {
-//                    systemController.setSystemBarsColor(
-//                        color = Color.Transparent,
-//                        darkIcons = !isSystemDarkMode
-//                    )
-//                }
-
-                Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)){
-                    val startDestination= viewModel.startDestination
-                    NavGraph(startDestination = startDestination)
-                }
+                val startDestination= viewModel.startDestination
+                NavGraph(startDestination = startDestination)
             }
         }
     }
