@@ -21,14 +21,12 @@ fun ArticlesList(
     modifier: Modifier = Modifier,
     articles: List<Article>,
     onClick: (Article) -> Unit,
-    listState: LazyListState = rememberLazyListState()
 ) {
 
         LazyColumn(
             modifier= modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(14.dp),
             contentPadding = PaddingValues(all = 6.dp),
-            state = listState
         ) {
             items(articles.size){
                 val article= articles[it]
@@ -41,14 +39,16 @@ fun ArticlesList(
 fun ArticlesList(
     modifier: Modifier = Modifier,
     articles: LazyPagingItems<Article>,
-    onClick: (Article) -> Unit
+    onClick: (Article) -> Unit,
+    listState: LazyListState = rememberLazyListState()
     ) {
     val handlePagingResult= HandlePagingResult(articles = articles)
     if(handlePagingResult){
         LazyColumn(
             modifier= modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(14.dp),
-            contentPadding = PaddingValues(all = 6.dp)
+            contentPadding = PaddingValues(all = 6.dp),
+            state = listState
         ) {
             items(articles.itemCount){
                 articles[it]?.let{

@@ -86,9 +86,7 @@ fun HomeScreen(articles: LazyPagingItems<Article>, navigateToSearch: ()-> Unit, 
                 color = colorResource(id = R.color.placeholder)
             )
             Spacer(modifier = Modifier.height(16.dp))
-            ArticlesList(articles = articles, modifier = Modifier.padding(horizontal = 16.dp)) {
-                navigateToDetails(it)
-            }
+            ArticlesList(articles = articles, modifier = Modifier.padding(horizontal = 16.dp), onClick = {navigateToDetails(it)}, listState = listState)
         }
     }
 }
@@ -151,7 +149,7 @@ fun CollapsedHeaderContent() {
         contentAlignment = Alignment.Center // Align text to start for collapsed header
     ) {
         Text(
-            text = "Pokedex",
+            text = "NewsApp",
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp
         )
