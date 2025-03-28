@@ -46,6 +46,7 @@ class MainActivity : ComponentActivity() {
             }
         }
         WindowCompat.setDecorFitsSystemWindows(window,false)
+        enableEdgeToEdge()
         setContent {
             NewsAppTheme {
                 val startDestination= viewModel.startDestination
