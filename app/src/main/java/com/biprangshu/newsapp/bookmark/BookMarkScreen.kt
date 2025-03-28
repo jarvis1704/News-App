@@ -3,6 +3,7 @@ package com.biprangshu.newsapp.bookmark
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
@@ -28,12 +29,12 @@ fun BookMarkScreen(
     Column(modifier = Modifier
         .fillMaxSize()
         .statusBarsPadding()
-        .padding(top = 24.dp, start = 24.dp, end = 24.dp)) {
+        .padding(16.dp)) {
         Text(text = "Bookmarks", style = MaterialTheme.typography.displayMedium.copy(fontWeight = FontWeight.Bold), color = colorResource(
             id = R.color.text_title)
         )
 
-        Spacer(modifier = Modifier.width(24.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         ArticlesList(articles = state.articles, onClick = {navigateToDetails(it)})
     }
