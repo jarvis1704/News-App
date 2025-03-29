@@ -1,28 +1,33 @@
 package com.biprangshu.newsapp
 
 import android.content.res.Configuration
-import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable // Import clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn // Use heightIn for min height
+import androidx.compose.foundation.layout.padding // Import padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface // Import Surface for readOnly state
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TextField // Keep TextField for interactive state
+import androidx.compose.material3.TextFieldDefaults // Keep TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue // Import getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.composed // Keep composed for modifier logic consistency (though simplified)
+import androidx.compose.ui.draw.clip // Import clip
+import androidx.compose.ui.graphics.Color // Keep Color for Transparent
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,88 +40,117 @@ fun SearchBar(
     modifier: Modifier = Modifier,
     text: String,
     readOnly: Boolean,
-    onClick: (() -> Unit?)? =null,
-    onValueChange:(String)-> Unit,
-    onSearch: ()-> Unit
-    ) {
-
-
+    onClick: (() -> Unit)? = null, // Corrected: onClick is nullable Unit function
+    onValueChange: (String) -> Unit,
+    onSearch: () -> Unit
+) {
     val interactionSource = remember {
         MutableInteractionSource()
     }
 
-    val isClicked= interactionSource.collectIsPressedAsState().value
-    LaunchedEffect(key1 = isClicked) {
-        if(isClicked){
+    // Handle click only when readOnly is true
+    val isPressed by interactionSource.collectIsPressedAsState()
+    LaunchedEffect(key1 = isPressed) {
+        if (isPressed && readOnly) { // Trigger onClick only if readOnly and pressed
             onClick?.invoke()
         }
     }
-    
-    Box(modifier = modifier){
-        TextField(
-            value = text, onValueChange = onValueChange,
-            modifier = Modifier
-                .fillMaxWidth()
-                .searchBarBorder(),
-            readOnly = readOnly,
-            leadingIcon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_search),
-                    contentDescription = null,
-                    modifier = Modifier.size(20.dp),
-                    tint = colorResource(id = R.color.body)
-                )
-            },
-            placeholder = {
-                Text(
-                    text = "Search",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = colorResource(
-                        id = R.color.placeholder
+
+    val searchBarMinHeight = 56.dp // Standard M3 height
+    val searchBarShape = MaterialTheme.shapes.extraLarge // Common M3 SearchBar shape
+
+    Box(modifier = modifier.heightIn(min = searchBarMinHeight)) { // Ensure minimum height
+        if (readOnly) {
+            // Use a Surface to mimic TextField appearance but make it clickable
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = searchBarMinHeight) // Ensure height
+                    .clip(searchBarShape)
+                    .clickable( // Make the surface clickable
+                        enabled = onClick != null, // Enable click only if onClick is provided
+                        interactionSource = interactionSource,
+                        indication = null // Basic visual feedback handled by interactionSource if needed elsewhere
+                    ) {
+                        // Actual click logic is in LaunchedEffect listening to isPressed
+                    },
+                shape = searchBarShape,
+                color = MaterialTheme.colorScheme.surfaceVariant, // M3 color for input backgrounds
+                contentColor = MaterialTheme.colorScheme.onSurfaceVariant // M3 color for placeholder/icons
+            ) {
+                // Layout content inside the Surface similar to TextField's placeholder/icon
+                Box(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp), contentAlignment = Alignment.CenterStart) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_search),
+                            contentDescription = "Search Icon",
+                            modifier = Modifier.size(24.dp), // Standard M3 icon size
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text(
+                            modifier = Modifier.padding(start = 8.dp),
+                            text = "Search News...", // Placeholder text for readOnly state
+                            style = MaterialTheme.typography.bodyLarge, // Match TextField's text style
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
+        } else {
+            // Use actual TextField when interactive
+            TextField(
+                value = text,
+                onValueChange = onValueChange,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = searchBarMinHeight), // Ensure consistent height
+                readOnly = false, // Explicitly false here
+                leadingIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_search),
+                        contentDescription = "Search Icon", // Add description
+                        modifier = Modifier.size(24.dp), // Standard M3 icon size
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant // M3 color for less emphasis
                     )
-                )
-            },
-            shape = MaterialTheme.shapes.medium,
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = colorResource(id = R.color.input_background),
-                focusedTextColor = if(isSystemInDarkTheme()) Color.White else Color.Black,
-                cursorColor = if(isSystemInDarkTheme()) Color.White else Color.Black,
-                disabledIndicatorColor = Color.Transparent,
-                errorIndicatorColor = Color.Transparent,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
-            ),
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-            keyboardActions = KeyboardActions(
-                onSearch = {onSearch()}
-            ),
-            textStyle = MaterialTheme.typography.bodySmall,
-            interactionSource = interactionSource
-        )
-    }
-    
-
-}
-
-
-//a custom modifier
-fun Modifier.searchBarBorder()= composed {
-    if(!isSystemInDarkTheme()){
-        border(width = 1.dp, color = Color.Black, shape = MaterialTheme.shapes.medium)
-    }else{
-        this
-    }
-}
-
-
-@Preview(showBackground = true)
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun SearchBarPreview() {
-    NewsAppTheme {
-        SearchBar(text = "", readOnly = false, onValueChange = {}) {
-            
+                },
+                placeholder = {
+                    Text(
+                        text = "Search News...", // Use more descriptive placeholder
+                        style = MaterialTheme.typography.bodyLarge, // Use bodyLarge for placeholder like M3
+                        color = MaterialTheme.colorScheme.onSurfaceVariant // M3 placeholder color
+                    )
+                },
+                shape = searchBarShape, // Use defined M3 shape
+                // **** CORRECTED: Use textFieldColors and appropriate parameters ****
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant, // Use containerColor
+                    // textColor = MaterialTheme.colorScheme.onSurface, // Implicitly uses content color
+                    cursorColor = MaterialTheme.colorScheme.primary,
+                    disabledIndicatorColor = Color.Transparent,
+                    errorIndicatorColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    // Icon and placeholder colors are often derived, but can be specified if needed
+                    // focusedLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    // unfocusedLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    // placeholderColor = MaterialTheme.colorScheme.onSurfaceVariant, // Handled by placeholder composable color
+                ),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                keyboardActions = KeyboardActions(
+                    onSearch = { onSearch() } // Keep original action
+                ),
+                textStyle = MaterialTheme.typography.bodyLarge, // Consistent text style
+                interactionSource = interactionSource // Keep interaction source
+            )
         }
     }
+}
+
+// Custom modifier can be removed or simplified if not strictly needed.
+// Keeping the structure but removing the border logic as M3 handles visual states.
+fun Modifier.searchBarBorder() = composed {
+    // No border applied by default in M3 filled TextField style.
+    // Use OutlinedTextField if border is desired.
+    this
 }
