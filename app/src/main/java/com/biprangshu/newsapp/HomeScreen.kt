@@ -10,6 +10,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 // Removed isSystemInDarkTheme import
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,6 +32,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 // Removed Color import
 // Removed colorResource import
 import androidx.compose.ui.text.font.FontWeight
@@ -46,96 +49,78 @@ import com.biprangshu.newsapp.domain.model.Article
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(articles: LazyPagingItems<Article>, navigateToSearch: ()-> Unit, navigateToDetails: (Article)-> Unit) {
-    val titles by remember {
+    val titles by remember{
         derivedStateOf {
-            if (articles.itemCount > 10) {
-                articles.itemSnapshotList.items
-                    .slice(IntRange(start = 0, endInclusive = 9))
-                    .joinToString(separator = " \u2022 ") { it.title } // Use a bullet point separator
-            } else {
+            if(articles.itemCount>10){
+                articles.itemSnapshotList.items.slice(IntRange(start = 0, endInclusive = 9)).joinToString(separator = "\uD83d\uDFE5"){it.title}
+            }else{
                 ""
             }
         }
     }
 
     val listState = rememberLazyListState()
-    // Renamed for clarity, derivedStateOf handles recomposition efficiently
-    val isScrolledToTop by remember {
-        derivedStateOf { listState.firstVisibleItemIndex == 0 && listState.firstVisibleItemScrollOffset == 0 }
+    val scrolledUp by remember {
+        derivedStateOf { listState.firstVisibleItemIndex <= 0 }
     }
 
-    // Surface removed, Scaffold in NewsNavigator provides the base surface
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background) // Apply background color here
-            .statusBarsPadding()
+    Surface(
+        color = MaterialTheme.colorScheme.background,
+        modifier = Modifier.fillMaxSize()
     ) {
-        // Pass isScrolledToTop (renamed from scrolledUp for clarity)
-        DynamicHeader(scrolledUp = isScrolledToTop, navigateToSearch = navigateToSearch)
+        Column(modifier = Modifier
+            .fillMaxSize()) {
+//            Text(text = "News App", style = MaterialTheme.typography.headlineLarge.copy(fontSize = 24.sp), modifier = Modifier.padding(16.dp), color = if (isSystemInDarkTheme()) Color.White else Color.Black, fontWeight = FontWeight.SemiBold
+//            )
+//            Spacer(modifier = Modifier.height(24.dp))
+//            SearchBar(text = "", readOnly = true, onValueChange = {}, onSearch = {}, onClick = {
+//                navigateToSearch()
+//            }, modifier = Modifier.padding(horizontal = 16.dp))
 
-        // Use AnimatedVisibility for smoother appearance/disappearance of marquee
-        AnimatedVisibility(
-            visible = titles.isNotEmpty() && isScrolledToTop, // Show only when scrolled up and titles exist
-            enter = fadeIn(),
-            exit = fadeOut()
-        ) {
+            DynamicHeader(scrolledUp = scrolledUp, navigateToSearch = navigateToSearch)
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = titles,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp) // Add padding to marquee
                     .basicMarquee(),
-                style = MaterialTheme.typography.labelSmall, // Use appropriate M3 typography
-                color = MaterialTheme.colorScheme.onSurfaceVariant // Use M3 color for less emphasis
+                fontSize = 12.sp,
+                color = colorResource(id = R.color.placeholder)
             )
+            Spacer(modifier = Modifier.height(8.dp))
+            ArticlesList(articles = articles, modifier = Modifier.padding(horizontal = 16.dp), onClick = {navigateToDetails(it)}, listState = listState)
         }
-
-        // Add a spacer that adjusts based on whether the marquee is visible
-        Spacer(modifier = Modifier.height(if (titles.isNotEmpty() && isScrolledToTop) 8.dp else 16.dp))
-
-        ArticlesList(
-            articles = articles,
-            modifier = Modifier.padding(horizontal = 16.dp), // Keep horizontal padding
-            onClick = { navigateToDetails(it) },
-            listState = listState
-        )
     }
 }
 
 @Composable
 fun DynamicHeader(modifier: Modifier = Modifier, scrolledUp: Boolean, navigateToSearch: ()-> Unit) {
     val headerHeightExpanded = 150.dp
-    val headerHeightCollapsed = 64.dp // Standard M3 Small TopAppBar height
+    val headerHeightCollapsed = 56.dp // Standard TopAppBar height
     val headerHeight by animateDpAsState(
         targetValue = if (scrolledUp) headerHeightExpanded else headerHeightCollapsed,
-        animationSpec = tween(durationMillis = 300),
-        label = "HeaderHeightAnimation" // Add label for debugging
+        animationSpec = tween(durationMillis = 300)
     )
 
-    // Use Surface for elevation and color control, respecting M3 guidelines
-    Surface(
-        modifier = modifier // Apply modifier passed in
+    Box(
+        modifier = Modifier
             .fillMaxWidth()
-            .height(headerHeight),
-        tonalElevation = if (!scrolledUp) 2.dp else 0.dp, // Add elevation when collapsed
-        color = MaterialTheme.colorScheme.surface // Use surface color
+            .height(headerHeight)
+            .background(MaterialTheme.colorScheme.background) // Ensure header background is consistent
     ) {
-        Box(modifier = Modifier.fillMaxSize()) { // Box fills the Surface
-            AnimatedVisibility(
-                visible = scrolledUp,
-                enter = fadeIn(animationSpec = tween(durationMillis = 200, delayMillis = 100)), // Slight delay
-                exit = fadeOut(animationSpec = tween(durationMillis = 100))
-            ) {
-                ExpandedHeaderContent(navigateToSearch)
-            }
-            AnimatedVisibility(
-                visible = !scrolledUp,
-                enter = fadeIn(animationSpec = tween(durationMillis = 200, delayMillis = 100)), // Slight delay
-                exit = fadeOut(animationSpec = tween(durationMillis = 100))
-            ) {
-                CollapsedHeaderContent()
-            }
+        AnimatedVisibility(
+            visible = scrolledUp,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            ExpandedHeaderContent(navigateToSearch)
+        }
+        AnimatedVisibility(
+            visible = !scrolledUp,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            CollapsedHeaderContent()
         }
     }
 }
@@ -146,23 +131,13 @@ fun ExpandedHeaderContent(navigateToSearch: ()-> Unit) {
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        verticalArrangement = Arrangement.Bottom // Align content towards the bottom before search bar
     ) {
-        Text(
-            text = "News App",
-            style = MaterialTheme.typography.headlineMedium, // Adjust typography slightly if needed
-            color = MaterialTheme.colorScheme.onSurface, // Use M3 color
-            fontWeight = FontWeight.Bold // Keep bold
+        Text(text = "News App", style = MaterialTheme.typography.headlineLarge.copy(fontSize = 24.sp), color = if (isSystemInDarkTheme()) Color.White else Color.Black, fontWeight = FontWeight.SemiBold
         )
         Spacer(modifier = Modifier.height(16.dp))
-        // Assuming SearchBar is a custom Composable - ensure it uses M3 internally
-        SearchBarHome(
-            text = "",
-            readOnly = true,
-            onValueChange = {},
-            onSearch = {},
-            onClick = navigateToSearch
-        )
+        SearchBarHome(text = "", readOnly = true, onValueChange = {}, onSearch = {}, onClick = {
+            navigateToSearch()
+        })
     }
 }
 
@@ -172,17 +147,15 @@ fun CollapsedHeaderContent() {
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp),
-        contentAlignment = Alignment.CenterStart // Align text to start for collapsed header
+        contentAlignment = Alignment.Center // Align text to start for collapsed header
     ) {
         Text(
             text = "NewsApp",
-            style = MaterialTheme.typography.titleLarge, // Use M3 Title Large for collapsed header
-            color = MaterialTheme.colorScheme.onSurface, // Use M3 color
-            fontWeight = FontWeight.Medium // Medium weight often used in TopAppBars
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.sp
         )
     }
 }
-
 // Assuming SearchBar definition exists elsewhere and is styled with M3 components (TextField, etc.)
 @Composable
 fun SearchBarHome(
