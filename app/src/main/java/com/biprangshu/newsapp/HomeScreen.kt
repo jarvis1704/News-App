@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.paging.compose.LazyPagingItems
 import com.biprangshu.newsapp.domain.model.Article
 import com.biprangshu.newsapp.ui.theme.Merriweather
+import com.biprangshu.newsapp.ui.theme.Montserrat
 
 // Removed unused NavController import
 // Removed unused Route import
@@ -88,7 +89,9 @@ fun HomeScreen(articles: LazyPagingItems<Article>, navigateToSearch: ()-> Unit, 
                     .fillMaxWidth()
                     .basicMarquee(),
                 fontSize = 12.sp,
-                color = colorResource(id = R.color.placeholder)
+                color = colorResource(id = R.color.placeholder),
+                fontFamily = Montserrat,
+                fontStyle = FontStyle.Italic
             )
             Spacer(modifier = Modifier.height(8.dp))
             ArticlesList(articles = articles, modifier = Modifier.padding(horizontal = 16.dp), onClick = {navigateToDetails(it)}, listState = listState)
@@ -137,7 +140,7 @@ fun ExpandedHeaderContent(navigateToSearch: ()-> Unit) {
     ) {
         Text(text = "News App", fontFamily = Merriweather, fontSize = 24.sp, fontStyle = FontStyle.Normal, fontWeight = FontWeight.SemiBold, color = if (isSystemInDarkTheme()) Color.White else Color.Black,
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(24.dp))
         SearchBarHome(text = "", readOnly = true, onValueChange = {}, onSearch = {}, onClick = {
             navigateToSearch()
         })
