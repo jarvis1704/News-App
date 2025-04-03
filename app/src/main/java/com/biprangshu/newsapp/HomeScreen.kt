@@ -138,7 +138,7 @@ fun ExpandedHeaderContent(navigateToSearch: ()-> Unit) {
             .fillMaxSize()
             .padding(16.dp),
     ) {
-        Text(text = "News App", fontFamily = Merriweather, fontSize = 24.sp, fontStyle = FontStyle.Normal, fontWeight = FontWeight.SemiBold, color = if (isSystemInDarkTheme()) Color.White else Color.Black,
+        Text(text = "News App", fontFamily = Merriweather, fontSize = 28.sp, fontStyle = FontStyle.Normal, fontWeight = FontWeight.SemiBold, color = if (isSystemInDarkTheme()) Color.White else Color.Black,
         )
         Spacer(modifier = Modifier.height(24.dp))
         SearchBarHome(text = "", readOnly = true, onValueChange = {}, onSearch = {}, onClick = {
@@ -158,7 +158,7 @@ fun CollapsedHeaderContent() {
         Text(
             text = "NewsApp",
             fontWeight = FontWeight.Bold,
-            fontSize = 20.sp,
+            fontSize = 24.sp,
             fontFamily = Merriweather
         )
     }
