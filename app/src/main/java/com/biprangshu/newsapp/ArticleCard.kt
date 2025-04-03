@@ -22,15 +22,19 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 // Removed colorResource import
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 // Removed unused copy import
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.biprangshu.newsapp.domain.model.Article
 import com.biprangshu.newsapp.domain.model.Source
+import com.biprangshu.newsapp.ui.theme.Merriweather
+import com.biprangshu.newsapp.ui.theme.Montserrat
 import com.biprangshu.newsapp.ui.theme.NewsAppTheme
 
 @Composable
@@ -69,21 +73,25 @@ fun ArticleCard(
         ) {
             Text(
                 text = article.title,
-                style = MaterialTheme.typography.bodyLarge, // Use BodyLarge for title emphasis
-                fontWeight = FontWeight.Medium, // Slightly bolder title
+                fontWeight = FontWeight.SemiBold, // Slightly bolder title
                 color = MaterialTheme.colorScheme.onSurface, // Use M3 color
                 maxLines = 3, // Allow slightly more lines for title
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                fontFamily = Merriweather,
+                fontStyle = FontStyle.Normal,
+                fontSize = 16.sp
             )
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = article.source.name,
-                    style = MaterialTheme.typography.labelMedium, // Keep labelMedium
                     fontWeight = FontWeight.Bold, // Keep bold for source
                     color = MaterialTheme.colorScheme.onSurfaceVariant, // Use M3 secondary color
                     maxLines = 1, // Ensure source name is single line
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    fontFamily = Merriweather,
+                    fontStyle = FontStyle.Normal,
+                    fontSize = 14.sp
                 )
                 Spacer(modifier = Modifier.width(8.dp)) // Increased spacer
                 Icon(
@@ -95,11 +103,12 @@ fun ArticleCard(
                 Spacer(modifier = Modifier.width(4.dp)) // Small spacer after icon
                 Text(
                     text = article.publishedAt, // Assuming this is pre-formatted time string
-                    style = MaterialTheme.typography.labelMedium, // Keep labelMedium
                     color = MaterialTheme.colorScheme.onSurfaceVariant, // Use M3 secondary color
                     maxLines = 1, // Keep time single line
                     overflow = TextOverflow.Ellipsis,
-                    // modifier = Modifier.padding(horizontal = 3.dp) // Removed padding here, use Spacers
+                    fontFamily = Montserrat,
+                    fontStyle = FontStyle.Italic,
+                    fontSize = 14.sp
                 )
             }
         }
