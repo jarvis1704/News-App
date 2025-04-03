@@ -29,9 +29,13 @@ import androidx.compose.ui.composed // Keep composed for modifier logic consiste
 import androidx.compose.ui.draw.clip // Import clip
 import androidx.compose.ui.graphics.Color // Keep Color for Transparent
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.biprangshu.newsapp.ui.theme.Merriweather
 import com.biprangshu.newsapp.ui.theme.NewsAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -115,33 +119,33 @@ fun SearchBar(
                 },
                 placeholder = {
                     Text(
-                        text = "Search News...", // Use more descriptive placeholder
-                        style = MaterialTheme.typography.bodyLarge, // Use bodyLarge for placeholder like M3
-                        color = MaterialTheme.colorScheme.onSurfaceVariant // M3 placeholder color
+                        text = "Search News",
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontFamily = Merriweather,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 14.sp,
+                        fontStyle = FontStyle.Normal
                     )
                 },
                 shape = searchBarShape, // Use defined M3 shape
-                // **** CORRECTED: Use textFieldColors and appropriate parameters ****
+
                 colors = TextFieldDefaults.textFieldColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant, // Use containerColor
-                    // textColor = MaterialTheme.colorScheme.onSurface, // Implicitly uses content color
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+
                     cursorColor = MaterialTheme.colorScheme.primary,
                     disabledIndicatorColor = Color.Transparent,
                     errorIndicatorColor = Color.Transparent,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
-                    // Icon and placeholder colors are often derived, but can be specified if needed
-                    // focusedLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    // unfocusedLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    // placeholderColor = MaterialTheme.colorScheme.onSurfaceVariant, // Handled by placeholder composable color
+
                 ),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                 keyboardActions = KeyboardActions(
-                    onSearch = { onSearch() } // Keep original action
+                    onSearch = { onSearch() }
                 ),
-                textStyle = MaterialTheme.typography.bodyLarge, // Consistent text style
-                interactionSource = interactionSource // Keep interaction source
+                textStyle = MaterialTheme.typography.bodyLarge,
+                interactionSource = interactionSource
             )
         }
     }
