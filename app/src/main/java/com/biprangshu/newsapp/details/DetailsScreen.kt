@@ -17,11 +17,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.biprangshu.newsapp.R
 import com.biprangshu.newsapp.domain.model.Article
+import com.biprangshu.newsapp.ui.theme.Merriweather
+import com.biprangshu.newsapp.ui.theme.Montserrat
 
 @Composable
 fun DetailsScreen(
@@ -89,16 +94,22 @@ fun DetailsScreen(
 
                     Text(
                         text = article.title,
-                        style = MaterialTheme.typography.headlineSmall, // M3 typography
-                        color = MaterialTheme.colorScheme.onSurface // M3 color
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontFamily = Merriweather,
+                        fontWeight = FontWeight.Bold,
+                        fontStyle = FontStyle.Normal,
+                        fontSize = 24.sp
                     )
 
                     Spacer(Modifier.height(12.dp)) // M3 spacing
 
                     Text(
                         text = article.content ?: "",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant // M3 color
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontFamily = Montserrat,
+                        fontWeight = FontWeight.Normal,
+                        fontStyle = FontStyle.Normal,
+                        fontSize = 16.sp
                     )
 
                     Spacer(Modifier.height(16.dp))
