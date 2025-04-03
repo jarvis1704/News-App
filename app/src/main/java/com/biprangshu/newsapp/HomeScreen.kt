@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontStyle
 // Removed Color import
 // Removed colorResource import
 import androidx.compose.ui.text.font.FontWeight
@@ -41,6 +42,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.paging.compose.LazyPagingItems
 import com.biprangshu.newsapp.domain.model.Article
+import com.biprangshu.newsapp.ui.theme.Merriweather
+
 // Removed unused NavController import
 // Removed unused Route import
 // Removed unused painterResource import
@@ -132,7 +135,7 @@ fun ExpandedHeaderContent(navigateToSearch: ()-> Unit) {
             .fillMaxSize()
             .padding(16.dp),
     ) {
-        Text(text = "News App", style = MaterialTheme.typography.headlineLarge.copy(fontSize = 24.sp), color = if (isSystemInDarkTheme()) Color.White else Color.Black, fontWeight = FontWeight.SemiBold
+        Text(text = "News App", fontFamily = Merriweather, fontSize = 24.sp, fontStyle = FontStyle.Normal, fontWeight = FontWeight.SemiBold, color = if (isSystemInDarkTheme()) Color.White else Color.Black,
         )
         Spacer(modifier = Modifier.height(16.dp))
         SearchBarHome(text = "", readOnly = true, onValueChange = {}, onSearch = {}, onClick = {
@@ -152,7 +155,8 @@ fun CollapsedHeaderContent() {
         Text(
             text = "NewsApp",
             fontWeight = FontWeight.Bold,
-            fontSize = 20.sp
+            fontSize = 20.sp,
+            fontFamily = Merriweather
         )
     }
 }
@@ -166,19 +170,19 @@ fun SearchBarHome(
     onClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
-    // Placeholder implementation: Use an M3 styled Button or clickable Surface if it's just a trigger
+
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .height(56.dp) // Standard M3 height for text fields/buttons
+            .height(56.dp)
             .clickable(enabled = readOnly && onClick != null) { onClick?.invoke() },
-        shape = MaterialTheme.shapes.extraLarge, // M3 SearchBar shape
-        color = MaterialTheme.colorScheme.surfaceVariant, // M3 SearchBar color
+        shape = MaterialTheme.shapes.extraLarge,
+        color = MaterialTheme.colorScheme.surfaceVariant,
         contentColor = MaterialTheme.colorScheme.onSurfaceVariant
     ) {
         Box(contentAlignment = Alignment.CenterStart, modifier = Modifier.padding(horizontal = 16.dp)) {
-            Text(text = if (readOnly) "Search News..." else text) // Placeholder text
+            Text(text = if (readOnly) "Search News" else text, fontFamily = Merriweather, fontSize = 20.sp, fontStyle = FontStyle.Normal) // Placeholder text
         }
     }
-    // Note: A real SearchBar would likely use OutlinedTextField or BasicTextField internally
+
 }
