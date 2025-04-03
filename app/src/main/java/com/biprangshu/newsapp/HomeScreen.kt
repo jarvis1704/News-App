@@ -181,7 +181,7 @@ fun SearchBarHome(
         contentColor = MaterialTheme.colorScheme.onSurfaceVariant
     ) {
         Box(contentAlignment = Alignment.CenterStart, modifier = Modifier.padding(horizontal = 16.dp)) {
-            Text(text = if (readOnly) "Search News" else text, fontFamily = Merriweather, fontSize = 20.sp, fontStyle = FontStyle.Normal) // Placeholder text
+            Text(text = if (readOnly) "Search News" else text, fontFamily = Merriweather, fontSize = 14.sp, fontStyle = FontStyle.Normal) // Placeholder text
         }
     }
 
