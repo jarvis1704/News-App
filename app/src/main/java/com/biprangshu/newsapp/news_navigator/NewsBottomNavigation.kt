@@ -17,7 +17,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.biprangshu.newsapp.ui.theme.Merriweather
 
 // Removed unused R import if R.color.body is no longer used
 
@@ -42,11 +46,11 @@ fun NewsBottomNavigator(
                     Column(horizontalAlignment = CenterHorizontally) {
                         Icon(
                             painter = painterResource(id = item.icon),
-                            contentDescription = item.text, // Add content description
-                            modifier = Modifier.size(24.dp) // Slightly larger default M3 icon size
+                            contentDescription = item.text,
+                            modifier = Modifier.size(24.dp)
                         )
-                        // No spacer needed if text is present, handled by item layout
-                        Text(text = item.text, style = MaterialTheme.typography.labelSmall)
+
+                        Text(text = item.text, fontFamily = Merriweather, fontSize = 14.sp, fontStyle = FontStyle.Normal, fontWeight = FontWeight.SemiBold)
                     }
                 },
                 colors = NavigationBarItemDefaults.colors(
