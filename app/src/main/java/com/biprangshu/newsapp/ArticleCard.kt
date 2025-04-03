@@ -91,13 +91,13 @@ fun ArticleCard(
                     overflow = TextOverflow.Ellipsis,
                     fontFamily = Merriweather,
                     fontStyle = FontStyle.Normal,
-                    fontSize = 14.sp
+                    fontSize = 12.sp
                 )
                 Spacer(modifier = Modifier.width(8.dp)) // Increased spacer
                 Icon(
                     painter = painterResource(id = R.drawable.ic_time),
                     contentDescription = "Publication time", // Add content description
-                    modifier = Modifier.size(14.dp), // Slightly larger icon
+                    modifier = Modifier.size(12.dp), // Slightly larger icon
                     tint = MaterialTheme.colorScheme.onSurfaceVariant // Use M3 secondary color
                 )
                 Spacer(modifier = Modifier.width(4.dp)) // Small spacer after icon
@@ -108,7 +108,7 @@ fun ArticleCard(
                     overflow = TextOverflow.Ellipsis,
                     fontFamily = Montserrat,
                     fontStyle = FontStyle.Italic,
-                    fontSize = 14.sp
+                    fontSize = 12.sp
                 )
             }
         }
